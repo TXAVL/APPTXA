@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TXA Flash Cards</string>
+    <string name="copyright">©️POWER BY TXA</string>
+    <string name="english">Tiếng Anh</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="tap_to_flip">Chạm để lật thẻ</string>
+    <string name="next_card">Thẻ tiếp theo</string>
+    <string name="previous_card">Thẻ trước</string>
+    <string name="word_list">Danh sách từ vựng</string>
+    <string name="add_word">Thêm từ mới</string>
+    <string name="search_hint">Tìm kiếm từ vựng...</string>
+    <string name="generating_words">Đang tạo từ vựng với AI...</string>
+    <string name="generate_more">Tạo thêm từ vựng</string>
+</resources>
+

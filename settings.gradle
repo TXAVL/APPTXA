@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TXA Notification Test"
+rootProject.name = "TXA Flash Cards"
 include ':app'
 

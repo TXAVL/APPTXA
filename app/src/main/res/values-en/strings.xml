@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TXA Flash Cards</string>
+    <string name="copyright">©️POWER BY TXA</string>
+    <string name="english">English</string>
+    <string name="vietnamese">Vietnamese</string>
+    <string name="tap_to_flip">Tap to flip card</string>
+    <string name="next_card">Next</string>
+    <string name="previous_card">Previous</string>
+    <string name="word_list">Word List</string>
+    <string name="add_word">Add Word</string>
+    <string name="search_hint">Search words...</string>
+    <string name="generating_words">Generating words with AI...</string>
+    <string name="generate_more">Generate More Words</string>
+</resources>
+
