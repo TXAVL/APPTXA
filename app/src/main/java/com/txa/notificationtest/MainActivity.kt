@@ -25,10 +25,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
+        // Log activity startup
+        LogHelper.logStartup("MainActivity onCreate called")
+        
         // Load saved language preference
         val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        val language = prefs.getString("language", "vi")
-        setAppLanguage(language ?: "vi")
+        val language = prefs.getString("language", "vi") ?: "vi"
+        currentLanguage = language
+        setAppLanguage(language)
         
         setContentView(R.layout.activity_main)
         
@@ -37,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         initViews()
         setupSpinner()
         setupListeners()
+        
+        LogHelper.logStartup("MainActivity initialized successfully")
     }
     
     private fun requestNotificationPermission() {
@@ -136,13 +142,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
+    private var currentLanguage: String = "vi"
+    
     override fun onResume() {
         super.onResume()
-        // Reload language when returning from settings
+        // Reload language when returning from settings - only recreate if language changed
         val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        val language = prefs.getString("language", "vi")
-        setAppLanguage(language ?: "vi")
-        recreate() // Recreate activity to apply language changes
+        val language = prefs.getString("language", "vi") ?: "vi"
+        if (language != currentLanguage) {
+            currentLanguage = language
+            recreate() // Only recreate if language actually changed
+        }
     }
 }
 

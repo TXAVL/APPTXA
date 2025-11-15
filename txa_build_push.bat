@@ -119,6 +119,8 @@ echo ?? Committing %MODE% APK to Git...
 REM Add all files (gitignore will exclude unnecessary .md files)
 REM Only README.md and BUILD_ERRORS_REPORT.md will be committed
 git add -A
+REM Force add APK file in releases folder (override gitignore)
+git add -f "%RELEASE_DIR%\!APK_DEST_NAME!"
 REM Commit
 git commit -m "Auto-build: Add !APK_DEST_NAME!" 2>nul || echo No changes to commit
 
