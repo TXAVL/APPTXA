@@ -69,7 +69,30 @@ object LogHelper {
                 }
             }
             
-            logStartup("LogHelper initialized. Log directory: ${logDir?.absolutePath}")
+            // Log sau khi init xong (không dùng logStartup vì có thể gây circular)
+            if (logDir != null) {
+                val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(Date())
+                val initMessage = "[$timestamp] STARTUP: LogHelper initialized. Log directory: ${logDir?.absolutePath}\n"
+                val startupFile = getLogFile(STARTUP_LOG_FILE)
+                val appLogFile = getLogFile(APP_LOG_FILE)
+                
+                startupFile?.parentFile?.mkdirs()
+                appLogFile?.parentFile?.mkdirs()
+                
+                startupFile?.let { 
+                    FileWriter(it, true).use { writer ->
+                        writer.append(initMessage)
+                        writer.flush()
+                    }
+                }
+                appLogFile?.let {
+                    FileWriter(it, true).use { writer ->
+                        writer.append(initMessage)
+                        writer.flush()
+                    }
+                }
+                Log.d(TAG, "LogHelper initialized. Log directory: ${logDir?.absolutePath}")
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize LogHelper", e)
             // Fallback cuối cùng - sử dụng internal storage
@@ -95,9 +118,21 @@ object LogHelper {
      */
     private fun writeToFile(fileName: String, message: String) {
         try {
-            val logFile = getLogFile(fileName) ?: return
+            if (logDir == null) {
+                Log.w(TAG, "LogHelper not initialized, cannot write to file: $fileName")
+                return
+            }
+            
+            val logFile = getLogFile(fileName) ?: run {
+                Log.e(TAG, "Cannot get log file: $fileName")
+                return
+            }
+            
             val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(Date())
             val logMessage = "[$timestamp] $message\n"
+            
+            // Đảm bảo thư mục tồn tại
+            logFile.parentFile?.mkdirs()
             
             FileWriter(logFile, true).use { writer ->
                 writer.append(logMessage)
@@ -107,6 +142,7 @@ object LogHelper {
             Log.d(TAG, "Logged to $fileName: $message")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to write log to file: $fileName", e)
+            e.printStackTrace()
         }
     }
     
