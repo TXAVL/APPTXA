@@ -23,6 +23,11 @@ if "%1"=="--release" set MODE=release
 REM --- Stop old Gradle daemons to free memory ---
 echo ?? Stopping old Gradle daemons...
 call gradlew.bat --stop >nul 2>&1
+timeout /t 2 /nobreak >nul 2>&1
+
+REM --- Kill stuck Java processes ---
+taskkill /F /IM java.exe >nul 2>&1
+timeout /t 1 /nobreak >nul 2>&1
 
 REM --- Build ---
 if "%MODE%"=="release" (
@@ -50,13 +55,13 @@ if "%MODE%"=="release" (
             if "!KEYPASS!"=="" set KEYPASS=!STOREPASS!
         )
     )
-    call gradlew.bat assembleRelease -Pandroid.injected.signing.store.file="%KEYSTORE%" ^
+    call gradlew.bat assembleRelease --no-daemon --max-workers=2 -Pandroid.injected.signing.store.file="%KEYSTORE%" ^
                                      -Pandroid.injected.signing.store.password="!STOREPASS!" ^
                                      -Pandroid.injected.signing.key.alias="%ALIAS%" ^
                                      -Pandroid.injected.signing.key.password="!KEYPASS!"
 ) else (
     echo ?? Building TXA Hub Mobile DEBUG APK...
-    call gradlew.bat assembleDebug
+    call gradlew.bat assembleDebug --no-daemon --max-workers=2
 )
 
 if errorlevel 1 (
